@@ -48,27 +48,19 @@ public class PaymentsDaoImpl implements PaymentsDao {
 	
 	public List<PaymentBean> getPaymentsList() {
 		List<PaymentBean> paymentsList = new ArrayList<PaymentBean>();
-		try {
-			String sql = "select a.payment_id as paymentId, a.agent_id as agentId, a.payment_date as paymentDate, a.amount as amount, "
-					+ "a.is_advance as advancePay, b.agent_name as agentName from payments a, agents b where a.agent_id = b.agent_id";
-			paymentsList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(PaymentBean.class));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		String sql = "select a.payment_id as paymentId, a.agent_id as agentId, a.payment_date as paymentDate, a.amount as amount, "
+				+ "a.is_advance as advancePay, b.agent_name as agentName from payments a, agents b where a.agent_id = b.agent_id";
+		paymentsList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(PaymentBean.class));
 		return paymentsList;
 	
 	}
 	
 	public List<PaymentBean> getPaymentsListForAgent(int agentId) {
 		List<PaymentBean> paymentsList = new ArrayList<PaymentBean>();
-		try {
-			String sql = "select a.payment_id as paymentId, a.agent_id as agentId, a.payment_date as paymentDate, a.amount as amount, "
-					+ "a.is_advance as advancePay, b.agent_name as agentName from payments a, agents b where a.agent_id = b.agent_id "
-					+ "and a.agent_id = " + agentId;
-			paymentsList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(PaymentBean.class));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		String sql = "select a.payment_id as paymentId, a.agent_id as agentId, a.payment_date as paymentDate, a.amount as amount, "
+				+ "a.is_advance as advancePay, b.agent_name as agentName from payments a, agents b where a.agent_id = b.agent_id "
+				+ "and a.agent_id = " + agentId;
+		paymentsList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(PaymentBean.class));
 		return paymentsList;
 	}
 }

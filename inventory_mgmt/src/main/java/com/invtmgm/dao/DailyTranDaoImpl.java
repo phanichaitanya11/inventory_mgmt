@@ -84,33 +84,25 @@ public class DailyTranDaoImpl implements DailyTranDao {
 	
 	public List<DailyTranBean> getTransactionsList() {
 		List<DailyTranBean> transactionsList = new ArrayList<DailyTranBean>();
-		try {
-			String sql = "select a.tran_id as transactionId, a.agent_id as agentId, a.tran_dt as tranDate, COALESCE(a.total_vol_bought, 0) as totalProdVolume, "
-					+ "COALESCE(a.approved_pdt_vol, 0) as approvedVol, COALESCE(a.reject1_vol, 0) as reject1Vol, COALESCE(a.reject2_vol, 0) as reject2Vol, "
-					+ "COALESCE(a.leaf_issued_vol, 0) as leafIssuedVol, COALESCE(a.tobacco_issued_vol, 0) as mixTobIssuedVol, a.tran_type as tranType, "
-					+ "b.agent_name as agentName, COALESCE(c.amount, 0) as advCashPaid "
-					+ "from daily_tran a left join agents b on  a.agent_id = b.agent_id "
-					+ "left join payments c on a.agent_id = c.agent_id and a.payment_id = c.payment_id";
-			transactionsList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(DailyTranBean.class));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		String sql = "select a.tran_id as transactionId, a.agent_id as agentId, a.tran_dt as tranDate, COALESCE(a.total_vol_bought, 0) as totalProdVolume, "
+				+ "COALESCE(a.approved_pdt_vol, 0) as approvedVol, COALESCE(a.reject1_vol, 0) as reject1Vol, COALESCE(a.reject2_vol, 0) as reject2Vol, "
+				+ "COALESCE(a.leaf_issued_vol, 0) as leafIssuedVol, COALESCE(a.tobacco_issued_vol, 0) as mixTobIssuedVol, a.tran_type as tranType, "
+				+ "b.agent_name as agentName, COALESCE(c.amount, 0) as advCashPaid "
+				+ "from daily_tran a left join agents b on  a.agent_id = b.agent_id "
+				+ "left join payments c on a.agent_id = c.agent_id and a.payment_id = c.payment_id";
+		transactionsList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(DailyTranBean.class));
 		return transactionsList;
 	}
 	
 	public List<DailyTranBean> getTransactionsListForAgent(int agentId) {
 		List<DailyTranBean> transactionsList = new ArrayList<DailyTranBean>();
-		try {
-			String sql = "select a.tran_id as transactionId, a.agent_id as agentId, a.tran_dt as tranDate, COALESCE(a.total_vol_bought, 0) as totalProdVolume, "
-					+ "COALESCE(a.approved_pdt_vol, 0) as approvedVol, COALESCE(a.reject1_vol, 0) as reject1Vol, COALESCE(a.reject2_vol, 0) as reject2Vol, "
-					+ "COALESCE(a.leaf_issued_vol, 0) as leafIssuedVol, COALESCE(a.tobacco_issued_vol, 0) as mixTobIssuedVol, a.tran_type as tranType, "
-					+ "b.agent_name as agentName, COALESCE(c.amount, 0) as advCashPaid "
-					+ "from daily_tran a left join agents b on  a.agent_id = b.agent_id "
-					+ "left join payments c on a.agent_id = c.agent_id and a.payment_id = c.payment_id where a.agent_id = " + agentId;
-			transactionsList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(DailyTranBean.class));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		String sql = "select a.tran_id as transactionId, a.agent_id as agentId, a.tran_dt as tranDate, COALESCE(a.total_vol_bought, 0) as totalProdVolume, "
+				+ "COALESCE(a.approved_pdt_vol, 0) as approvedVol, COALESCE(a.reject1_vol, 0) as reject1Vol, COALESCE(a.reject2_vol, 0) as reject2Vol, "
+				+ "COALESCE(a.leaf_issued_vol, 0) as leafIssuedVol, COALESCE(a.tobacco_issued_vol, 0) as mixTobIssuedVol, a.tran_type as tranType, "
+				+ "b.agent_name as agentName, COALESCE(c.amount, 0) as advCashPaid "
+				+ "from daily_tran a left join agents b on  a.agent_id = b.agent_id "
+				+ "left join payments c on a.agent_id = c.agent_id and a.payment_id = c.payment_id where a.agent_id = " + agentId;
+		transactionsList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(DailyTranBean.class));
 		return transactionsList;
 	}
 	

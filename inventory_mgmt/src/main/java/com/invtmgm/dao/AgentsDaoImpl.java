@@ -28,32 +28,28 @@ public class AgentsDaoImpl implements AgentsDao {
 
 	public int addAgent(final AgentBean agent) {
 		int retVal = 0;
-		try {
-			final String sql = "Insert into agents (agent_name, address, phone_num, mobile_num, temp_flag, rate_per_1000, rate_of_leaf, rate_of_tobacco, updated_by) "
-					+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			KeyHolder keyHolder = new GeneratedKeyHolder();
-			jdbcTemplate.update(new PreparedStatementCreator() {
+		final String sql = "Insert into agents (agent_name, address, phone_num, mobile_num, temp_flag, rate_per_1000, rate_of_leaf, rate_of_tobacco, updated_by) "
+				+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update(new PreparedStatementCreator() {
 
-				public PreparedStatement createPreparedStatement(Connection con)
-						throws SQLException {
-					PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-					ps.setString(1, agent.getAgentName());
-					ps.setString(2, agent.getAddress());
-					ps.setString(3, agent.getPhoneNum());
-					ps.setString(4, agent.getMobileNum());
-					ps.setBoolean(5, agent.isTempFlag());
-					ps.setFloat(6, agent.getRatePer1000());
-					ps.setFloat(7, agent.getRateOfLeaf());
-					ps.setFloat(8, agent.getRateOfTobacco());
-					ps.setString(9, "admin");
-					return ps;
-				}
-			}, keyHolder);
+			public PreparedStatement createPreparedStatement(Connection con)
+					throws SQLException {
+				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, agent.getAgentName());
+				ps.setString(2, agent.getAddress());
+				ps.setString(3, agent.getPhoneNum());
+				ps.setString(4, agent.getMobileNum());
+				ps.setBoolean(5, agent.isTempFlag());
+				ps.setFloat(6, agent.getRatePer1000());
+				ps.setFloat(7, agent.getRateOfLeaf());
+				ps.setFloat(8, agent.getRateOfTobacco());
+				ps.setString(9, "admin");
+				return ps;
+			}
+		}, keyHolder);
 
-			retVal = keyHolder.getKey().intValue();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		retVal = keyHolder.getKey().intValue();
 		return retVal;
 	}
 
@@ -65,55 +61,41 @@ public class AgentsDaoImpl implements AgentsDao {
 			bean = jdbcTemplate.queryForObject(sql, new AgentRowMapper(), args);
 		} catch (EmptyResultDataAccessException er) {
 			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return bean;
 	}
 
 	public AgentBean updateAgent(AgentBean bean) {
 		AgentBean updatedBean = new AgentBean();
-		try {
-			String sql = "update agents set agent_name = ?, address = ? , phone_num = ?, mobile_num = ?, temp_flag = ?, rate_per_1000 = ?, rate_of_leaf = ?, rate_of_tobacco = ?"
-					+ " where agent_id = ?";
-			Object[] args = new Object[] { bean.getAgentName(), bean.getAddress(), bean.getPhoneNum(), bean.getMobileNum(), bean.isTempFlag(), 
-					bean.getRatePer1000(), bean.getRateOfLeaf(), bean.getRateOfTobacco(), bean.getAgentId()};
-			int rowsUpdated = jdbcTemplate.update(sql, args);
-			if (rowsUpdated != 0) {
-				updatedBean = getAgent(bean.getAgentId());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		String sql = "update agents set agent_name = ?, address = ? , phone_num = ?, mobile_num = ?, temp_flag = ?, rate_per_1000 = ?, rate_of_leaf = ?, rate_of_tobacco = ?"
+				+ " where agent_id = ?";
+		Object[] args = new Object[] { bean.getAgentName(), bean.getAddress(), bean.getPhoneNum(), bean.getMobileNum(), bean.isTempFlag(), 
+				bean.getRatePer1000(), bean.getRateOfLeaf(), bean.getRateOfTobacco(), bean.getAgentId()};
+		int rowsUpdated = jdbcTemplate.update(sql, args);
+		if (rowsUpdated != 0) {
+			updatedBean = getAgent(bean.getAgentId());
 		}
 		return updatedBean;
 	}
 	
 	public boolean deleteAgent(int agentId) {
 		boolean deleteSuccess = false;
-		try {
-			String sql = "delete from agents where agent_id = ?";
-			Object[] args = new Object[] {agentId};
-			int rowsUpdated = jdbcTemplate.update(sql, args);
-			if (rowsUpdated != 0) {
-				deleteSuccess = true;
-			} else {
-				deleteSuccess = false;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		String sql = "delete from agents where agent_id = ?";
+		Object[] args = new Object[] {agentId};
+		int rowsUpdated = jdbcTemplate.update(sql, args);
+		if (rowsUpdated != 0) {
+			deleteSuccess = true;
+		} else {
+			deleteSuccess = false;
 		}
 		return deleteSuccess;
 	}
 
 	public List<AgentBean> getAgentsList() {
 		List<AgentBean> agentsList = new ArrayList<AgentBean>();
-		try {
-			String sql = "select agent_id as agentId, agent_name as agentName, address, phone_num as phoneNum, mobile_num as mobileNum, temp_flag as tempFlag,"
-					+ " rate_of_leaf as rateOfLeaf, rate_of_tobacco as rateOfTobacco, rate_per_1000 as ratePer1000 from agents";
-			agentsList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(AgentBean.class));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		String sql = "select agent_id as agentId, agent_name as agentName, address, phone_num as phoneNum, mobile_num as mobileNum, temp_flag as tempFlag,"
+				+ " rate_of_leaf as rateOfLeaf, rate_of_tobacco as rateOfTobacco, rate_per_1000 as ratePer1000 from agents";
+		agentsList = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(AgentBean.class));
 		return agentsList;
 	}
 
